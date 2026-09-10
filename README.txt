@@ -1,5 +1,10 @@
-วิธีใช้งาน
-1. วาง index.html และ games.json ไว้ในโฟลเดอร์เดียวกับรูป game-001.webp ถึง game-170.webp
-2. ไม่ต้องสร้างโฟลเดอร์ images
-3. รูปต้องใช้ชื่อ game-001.webp, game-002.webp, ... game-170.webp ตามที่อยู่ใน GitHub
-4. แก้ URL ของแต่ละเกมใน games.json จาก https://example.com/ เป็น URL จริง
+แก้ไขจากไฟล์ที่ผู้ใช้อัปโหลด
+- รูปจริงอยู่ในโฟลเดอร์ images/ จึงแก้ image path เป็น ./images/game-xxx.webp
+- Banner MASTERWORLDBET
+- ปุ่ม เข้าเล่นตอนนี้ (ยังเป็น placeholder)
+- แท็บ ทั้งหมด / ยอดนิยม / ฮิต / มาใหม่ / รายการโปรด
+- มาใหม่เรียง game-170 ก่อน
+- หัวใจบันทึกด้วย localStorage
+- Hover มีแสงรอบกรอบ
+อัปโหลด index.html และ games.json ทับไฟล์เดิม โดยไม่ต้องอัปโหลดโฟลเดอร์ images ใหม่
+หมายเหตุ: tags ใน games.json เป็นเพียงการจัดหมวดตัวอย่าง ไม่ใช่ข้อมูลโอกาสชนะหรือการรับประกันผล

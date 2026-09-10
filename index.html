@@ -3,79 +3,194 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>เกมทั้งหมด</title>
+<title>MASTERWORLDBET</title>
 <style>
+:root{
+  --bg:#06101d;--card:#0c1b2c;--line:#244667;
+  --accent:#a86cff;--accent2:#5ddcff;
+}
 *{box-sizing:border-box}
-html,body{margin:0;background:#07111f;color:#fff;font-family:Arial,sans-serif}
+html,body{margin:0;background:var(--bg);color:#fff;font-family:Arial,sans-serif}
 body{padding:10px}
+.top{
+  max-width:1400px;margin:0 auto 12px;
+}
+.banner{
+  min-height:92px;border:1px solid #6241a0;border-radius:16px;
+  background:radial-gradient(circle at 50% 0%,#28375c 0,#131f37 45%,#0a1424 100%);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;box-shadow:0 8px 28px rgba(0,0,0,.35);
+}
+.brand{min-width:0}
+.brand h1{
+  margin:0;font-size:clamp(25px,5vw,44px);font-weight:900;letter-spacing:3px;
+  background:linear-gradient(90deg,#fff,#d8c6ff,#fff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.brand p{margin:6px 0 0;font-size:11px;letter-spacing:2px;opacity:.65}
+.play{
+  border:1px solid #b98cff;border-radius:10px;padding:12px 18px;
+  background:linear-gradient(135deg,#7a42d8,#4b2893);color:#fff;
+  font-weight:800;white-space:nowrap;cursor:pointer;
+  box-shadow:0 0 18px rgba(168,108,255,.25);
+}
+.play:hover{box-shadow:0 0 24px rgba(168,108,255,.55)}
+.tabs{
+  display:flex;gap:8px;overflow:auto;margin-top:10px;padding-bottom:2px;
+}
+.tab{
+  border:1px solid #294664;background:#0b1829;color:#cbd8e8;
+  padding:9px 16px;border-radius:999px;cursor:pointer;white-space:nowrap;
+}
+.tab.active,.tab:hover{
+  border-color:#9b68ed;color:#fff;box-shadow:0 0 14px rgba(168,108,255,.28)
+}
 .grid{
-  display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:10px;
-  max-width:1400px;
-  margin:0 auto;
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:10px;max-width:1400px;margin:0 auto;
 }
 .card{
-  display:block;
-  overflow:hidden;
-  border:1px solid #27466a;
-  border-radius:12px;
-  background:#0d1b2d;
-  aspect-ratio:1/1.18;
-  text-decoration:none;
+  position:relative;display:block;overflow:hidden;border:1px solid var(--line);
+  border-radius:12px;background:var(--card);aspect-ratio:326/440;
+  text-decoration:none;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
 }
-.card img{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;
+.card:hover{
+  transform:translateY(-3px) scale(1.012);
+  border-color:#b879ff;
+  box-shadow:0 0 6px rgba(93,220,255,.6),0 0 18px rgba(168,108,255,.55),0 0 32px rgba(168,108,255,.22);
+  z-index:2;
 }
-@media(max-width:1000px){
-  .grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.card img{width:100%;height:100%;display:block;object-fit:cover}
+.fav{
+  position:absolute;right:7px;top:7px;width:34px;height:34px;border:0;border-radius:50%;
+  background:rgba(3,10,20,.72);color:#fff;font-size:20px;line-height:34px;
+  cursor:pointer;z-index:3;backdrop-filter:blur(4px);
+  box-shadow:0 2px 8px rgba(0,0,0,.3)
 }
+.fav.active{color:#ff5b91;text-shadow:0 0 10px rgba(255,91,145,.8)}
+.empty{grid-column:1/-1;text-align:center;padding:40px;opacity:.65}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(max-width:700px){
-  .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
-  body{padding:7px}
+  body{padding:7px}.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+  .banner{min-height:76px;padding:11px 12px}.play{padding:10px 12px;font-size:12px}
+  .brand p{font-size:9px}
 }
 @media(max-width:430px){
-  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-  body{padding:6px}
+  body{padding:6px}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .banner{border-radius:12px}.brand h1{letter-spacing:2px}
+  .play{font-size:11px;padding:9px 10px}
 }
 </style>
 </head>
 <body>
-<div id="grid" class="grid"></div>
+<header class="top">
+  <div class="banner">
+    <div class="brand">
+      <h1>MASTERWORLDBET</h1>
+      <p>OFFICIAL GAME MENU • MASTERWORLD</p>
+    </div>
+    <button class="play" id="playNow">เข้าเล่นตอนนี้</button>
+  </div>
+  <nav class="tabs" aria-label="หมวดเกม">
+    <button class="tab active" data-filter="all">ทั้งหมด</button>
+    <button class="tab" data-filter="popular">ยอดนิยม</button>
+    <button class="tab" data-filter="hit">ฮิต</button>
+    <button class="tab" data-filter="new">มาใหม่</button>
+    <button class="tab" data-filter="favorite">♥ รายการโปรด</button>
+  </nav>
+</header>
+
+<main id="grid" class="grid"></main>
 
 <script>
+const PLAY_URL = "#"; // ใส่ URL จริงภายหลัง
+let games = [];
+let currentFilter = "all";
+const favorites = new Set(JSON.parse(localStorage.getItem("masterworld_favorites") || "[]"));
+
 async function loadGames(){
-  const res = await fetch('./games.json', {cache:'no-store'});
-  if(!res.ok) throw new Error('โหลด games.json ไม่สำเร็จ');
-  const games = await res.json();
+  const res = await fetch("./games.json",{cache:"no-store"});
+  if(!res.ok) throw new Error("โหลด games.json ไม่สำเร็จ");
+  games = await res.json();
+  render();
+}
 
-  const grid = document.getElementById('grid');
+function saveFavorites(){
+  localStorage.setItem("masterworld_favorites",JSON.stringify([...favorites]));
+}
 
-  games.forEach(game => {
-    const a = document.createElement('a');
-    a.className = 'card';
-    a.href = game.url || '#';
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
+function filteredGames(){
+  let list = [...games];
+  if(currentFilter === "favorite") list = list.filter(g => favorites.has(String(g.id)));
+  else if(currentFilter !== "all") list = list.filter(g => (g.tags||[]).includes(currentFilter));
 
-    const img = document.createElement('img');
-    img.src = game.image;
-    img.alt = '';
-    img.loading = 'lazy';
-    img.onerror = function(){
-      this.style.display = 'none';
-    };
+  // "มาใหม่" ให้เลข 170 อยู่ก่อนตามที่ขอ
+  if(currentFilter === "new") list.sort((a,b)=>b.id-a.id);
+  return list;
+}
 
+function render(){
+  const grid=document.getElementById("grid");
+  grid.innerHTML="";
+  const list=filteredGames();
+
+  if(!list.length){
+    grid.innerHTML='<div class="empty">ยังไม่มีเกมในรายการโปรด</div>';
+    return;
+  }
+
+  list.forEach(game=>{
+    const card=document.createElement("div");
+    card.className="card";
+
+    const a=document.createElement("a");
+    a.href=game.url || "#";
+    a.target="_blank";
+    a.rel="noopener noreferrer";
+    a.style.cssText="display:block;width:100%;height:100%";
+
+    const img=document.createElement("img");
+    img.src="./images/"+game.image;
+    img.alt="";
+    img.loading="lazy";
+    img.decoding="async";
     a.appendChild(img);
-    grid.appendChild(a);
+
+    const fav=document.createElement("button");
+    fav.className="fav"+(favorites.has(String(game.id))?" active":"");
+    fav.type="button";
+    fav.textContent=favorites.has(String(game.id))?"♥":"♡";
+    fav.setAttribute("aria-label","เพิ่มหรือลบรายการโปรด");
+    fav.addEventListener("click",e=>{
+      e.preventDefault();e.stopPropagation();
+      const id=String(game.id);
+      if(favorites.has(id)) favorites.delete(id); else favorites.add(id);
+      saveFavorites(); render();
+    });
+
+    card.appendChild(a);
+    card.appendChild(fav);
+    grid.appendChild(card);
   });
 }
 
-loadGames().catch(err => {
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter=btn.dataset.filter;
+    render();
+  });
+});
+
+document.getElementById("playNow").addEventListener("click",()=>{
+  if(PLAY_URL !== "#") window.open(PLAY_URL,"_blank","noopener,noreferrer");
+  else alert("ปุ่มนี้รอใส่ URL จริง");
+});
+
+loadGames().catch(err=>{
   console.error(err);
+  document.getElementById("grid").innerHTML='<div class="empty">ไม่สามารถโหลดรายการเกมได้</div>';
 });
 </script>
 </body>
