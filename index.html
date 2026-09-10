@@ -2,51 +2,81 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07111f">
-<title>MASTERWORLD GAME CENTER</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>เกมทั้งหมด</title>
 <style>
-:root{--bg:#07111f;--card:#0d1b2d;--line:#1d3855}
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg)}
-body{font-family:Arial,"Noto Sans Thai",sans-serif;color:#fff}
-.wrap{max-width:1100px;margin:auto;padding:10px}
-.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px}
-.card{display:block;min-width:0;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--card);text-decoration:none;cursor:pointer}
-.card img{display:block;width:100%;aspect-ratio:320/440;object-fit:cover}
-@media(max-width:800px){.grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.wrap{padding:7px}}
-@media(max-width:560px){.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.wrap{padding:6px}}
-@media(max-width:390px){.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}}
+html,body{margin:0;background:#07111f;color:#fff;font-family:Arial,sans-serif}
+body{padding:10px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:10px;
+  max-width:1400px;
+  margin:0 auto;
+}
+.card{
+  display:block;
+  overflow:hidden;
+  border:1px solid #27466a;
+  border-radius:12px;
+  background:#0d1b2d;
+  aspect-ratio:1/1.18;
+  text-decoration:none;
+}
+.card img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+@media(max-width:1000px){
+  .grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
+@media(max-width:700px){
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+  body{padding:7px}
+}
+@media(max-width:430px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  body{padding:6px}
+}
 </style>
 </head>
 <body>
-<main class="wrap"><section id="grid" class="grid" aria-label="รายการเกม"></section></main>
+<div id="grid" class="grid"></div>
+
 <script>
-const grid=document.getElementById("grid");
-function safeUrl(u){
-  try{
-    const x=new URL(u,location.href);
-    return ["http:","https:"].includes(x.protocol)?x.href:"#";
-  }catch{return "#"}
-}
-fetch("games.json")
-  .then(r=>r.json())
-  .then(games=>{
-    grid.innerHTML="";
-    games.forEach(g=>{
-      const a=document.createElement("a");
-      a.className="card";
-      a.href=safeUrl(g.url);
-      a.target="_blank";
-      a.rel="noopener noreferrer";
-      const img=document.createElement("img");
-      img.loading="lazy";
-      img.src=g.image;
-      img.alt="";
-      a.appendChild(img);
-      grid.appendChild(a);
-    });
+async function loadGames(){
+  const res = await fetch('./games.json', {cache:'no-store'});
+  if(!res.ok) throw new Error('โหลด games.json ไม่สำเร็จ');
+  const games = await res.json();
+
+  const grid = document.getElementById('grid');
+
+  games.forEach(game => {
+    const a = document.createElement('a');
+    a.className = 'card';
+    a.href = game.url || '#';
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+
+    const img = document.createElement('img');
+    img.src = game.image;
+    img.alt = '';
+    img.loading = 'lazy';
+    img.onerror = function(){
+      this.style.display = 'none';
+    };
+
+    a.appendChild(img);
+    grid.appendChild(a);
   });
+}
+
+loadGames().catch(err => {
+  console.error(err);
+});
 </script>
 </body>
 </html>
