@@ -151,22 +151,16 @@ async function loadGames(){
 }
 
 function filteredGames(){
-  let list = [...games];
-
-  if(currentFilter === "favorite") {
-    list = list.filter(g => favorites.has(String(g.id)));
-  } 
-  else if(currentFilter !== "all") {
-    list = list.filter(g => (g.tags || []).includes(currentFilter));
+  let list=[...games];
+  if(currentFilter==="favorite") list=list.filter(g=>favorites.has(String(g.id)));
+  else if(currentFilter!=="all") list=list.filter(g=>(g.tags||[]).includes(currentFilter));
+  if(currentFilter==="new") {
+    list.sort((a,b)=>b.id-a.id);
   }
 
-  if(currentFilter === "new") {
-    list.sort((a, b) => b.id - a.id);
-  }
-
-  if(currentFilter === "popular") {
-    list.sort((a, b) => 
-      scoreMap[String(b.id)] - scoreMap[String(a.id)]
+  if(currentFilter==="popular") {
+    list.sort((a,b)=>
+      scoreMap[String(b.id)]-scoreMap[String(a.id)]
     );
   }
 
@@ -178,7 +172,7 @@ function formatCountdown(){
   const totalSec=Math.ceil(remaining/1000);
   const m=Math.floor(totalSec/60);
   const s=totalSec%60;
-  return `เวลาที่เหลือ ${m}:${String(s).padStart(2,"0")}`;
+  return `สุ่มใหม่ ${m}:${String(s).padStart(2,"0")}`;
 }
 
 function render(){
