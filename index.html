@@ -151,10 +151,25 @@ async function loadGames(){
 }
 
 function filteredGames(){
-  let list=[...games];
-  if(currentFilter==="favorite") list=list.filter(g=>favorites.has(String(g.id)));
-  else if(currentFilter!=="all") list=list.filter(g=>(g.tags||[]).includes(currentFilter));
-  if(currentFilter==="new") list.sort((a,b)=>b.id-a.id);
+  let list = [...games];
+
+  if(currentFilter === "favorite") {
+    list = list.filter(g => favorites.has(String(g.id)));
+  } 
+  else if(currentFilter !== "all") {
+    list = list.filter(g => (g.tags || []).includes(currentFilter));
+  }
+
+  if(currentFilter === "new") {
+    list.sort((a, b) => b.id - a.id);
+  }
+
+  if(currentFilter === "popular") {
+    list.sort((a, b) => 
+      scoreMap[String(b.id)] - scoreMap[String(a.id)]
+    );
+  }
+
   return list;
 }
 
