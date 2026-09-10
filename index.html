@@ -88,59 +88,79 @@ body{padding:10px}
   .banner{min-height:76px;padding:11px 12px}.play{padding:10px 12px;font-size:12px}
   .brand p{font-size:9px}.scorebar{left:5px;right:5px;bottom:5px}
 }
-@media(max-width:430px){
+@media(max-width:600px){
   body{padding:6px}
   .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+
   .banner{border-radius:12px}
   .brand h1{letter-spacing:2px}
   .play{font-size:11px;padding:9px 10px}
 
   .scorebar{
-    left:4px;
-    right:4px;
-    bottom:4px;
-    height:48px;
-    padding:5px 6px 6px;
-    border-radius:8px;
+    position:absolute !important;
+    left:4px !important;
+    right:4px !important;
+    bottom:4px !important;
+    height:46px !important;
+    padding:5px 6px 6px !important;
+    border-radius:8px !important;
   }
+
   .scoretop{
-    display:flex;
-    flex-wrap:nowrap;
-    align-items:center;
-    gap:3px;
-    margin-bottom:5px;
-    font-size:8px;
-    line-height:11px;
-    white-space:nowrap;
+    display:flex !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:3px !important;
+    width:100% !important;
+    height:13px !important;
+    margin:0 0 5px !important;
+    font-size:8px !important;
+    line-height:13px !important;
+    white-space:nowrap !important;
   }
+
   .scorevalue{
-    flex:1 1 auto;
-    min-width:0;
-    font-size:9px;
-    line-height:11px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
+    display:block !important;
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    width:auto !important;
+    font-size:9px !important;
+    line-height:13px !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
   }
+
   .countdown{
-    flex:0 0 auto;
-    font-size:7px;
-    line-height:10px;
-    white-space:nowrap;
+    display:block !important;
+    flex:0 0 auto !important;
+    width:auto !important;
+    font-size:7px !important;
+    line-height:13px !important;
+    white-space:nowrap !important;
   }
+
   .track{
-    display:block;
-    width:100%;
-    height:6px;
-    border-radius:99px;
-    overflow:hidden;
-    background:#26384d;
+    display:block !important;
+    position:relative !important;
+    width:100% !important;
+    height:7px !important;
+    min-height:7px !important;
+    margin:0 !important;
+    padding:0 !important;
+    border-radius:99px !important;
+    overflow:hidden !important;
+    background:#26384d !important;
   }
+
   .fill{
-    display:block;
-    height:100%;
-    min-width:2px;
-    border-radius:99px;
+    display:block !important;
+    height:100% !important;
+    min-height:7px !important;
+    min-width:2px !important;
+    border-radius:99px !important;
   }
 }
 </style>
@@ -205,7 +225,7 @@ function saveFavorites(){
 }
 
 async function loadGames(){
-  const res = await fetch("./games.json",{cache:"no-store"});
+  const res = await fetch("./games.json?"+Date.now(),{cache:"no-store"});
   if(!res.ok) throw new Error("โหลด games.json ไม่สำเร็จ");
   games = await res.json();
 
