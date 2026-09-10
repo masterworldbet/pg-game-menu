@@ -12,7 +12,9 @@
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:#fff;font-family:Arial,sans-serif}
 body{padding:10px}
-.top{max-width:1400px;margin:0 auto 12px}
+.top{
+  max-width:1400px;margin:0 auto 12px;
+}
 .banner{
   min-height:92px;border:1px solid #6241a0;border-radius:16px;
   background:radial-gradient(circle at 50% 0%,#28375c 0,#131f37 45%,#0a1424 100%);
@@ -33,7 +35,9 @@ body{padding:10px}
   box-shadow:0 0 18px rgba(168,108,255,.25);
 }
 .play:hover{box-shadow:0 0 24px rgba(168,108,255,.55)}
-.tabs{display:flex;gap:8px;overflow:auto;margin-top:10px;padding-bottom:2px}
+.tabs{
+  display:flex;gap:8px;overflow:auto;margin-top:10px;padding-bottom:2px;
+}
 .tab{
   border:1px solid #294664;background:#0b1829;color:#cbd8e8;
   padding:9px 16px;border-radius:999px;cursor:pointer;white-space:nowrap;
@@ -48,7 +52,7 @@ body{padding:10px}
 .card{
   position:relative;display:block;overflow:hidden;border:1px solid var(--line);
   border-radius:12px;background:var(--card);aspect-ratio:326/440;
-  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+  text-decoration:none;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
 }
 .card:hover{
   transform:translateY(-3px) scale(1.012);
@@ -56,7 +60,7 @@ body{padding:10px}
   box-shadow:0 0 6px rgba(93,220,255,.6),0 0 18px rgba(168,108,255,.55),0 0 32px rgba(168,108,255,.22);
   z-index:2;
 }
-.card img{width:100%;height:100%;display:block;object-fit:cover;cursor:default}
+.card img{width:100%;height:100%;display:block;object-fit:cover}
 .fav{
   position:absolute;right:7px;top:7px;width:34px;height:34px;border:0;border-radius:50%;
   background:rgba(3,10,20,.72);color:#fff;font-size:20px;line-height:34px;
@@ -64,35 +68,17 @@ body{padding:10px}
   box-shadow:0 2px 8px rgba(0,0,0,.3)
 }
 .fav.active{color:#ff5b91;text-shadow:0 0 10px rgba(255,91,145,.8)}
-.scorebar{
-  position:absolute;left:7px;right:7px;bottom:7px;height:38px;
-  padding:5px 8px;border-radius:9px;
-  background:rgba(3,10,20,.82);backdrop-filter:blur(5px);
-  border:1px solid rgba(255,255,255,.10);
-  z-index:3;
-}
-.scoretop{display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-bottom:4px}
-.scorevalue{font-weight:900;font-size:12px}
-.countdown{opacity:.72;font-size:9px}
-.track{height:4px;border-radius:99px;background:#26384d;overflow:hidden}
-.fill{
-  height:100%;width:0;border-radius:99px;
-  background:linear-gradient(90deg,#5ddcff,#a86cff);
-  box-shadow:0 0 8px rgba(168,108,255,.55);
-  transition:width .35s ease;
-}
 .empty{grid-column:1/-1;text-align:center;padding:40px;opacity:.65}
 @media(max-width:1000px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media(max-width:700px){
   body{padding:7px}.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
   .banner{min-height:76px;padding:11px 12px}.play{padding:10px 12px;font-size:12px}
-  .brand p{font-size:9px}.scorebar{left:5px;right:5px;bottom:5px}
+  .brand p{font-size:9px}
 }
 @media(max-width:430px){
   body{padding:6px}.grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
   .banner{border-radius:12px}.brand h1{letter-spacing:2px}
-  .play{font-size:11px;padding:9px 10px}.scorebar{height:34px;padding:4px 6px}
-  .scoretop{font-size:9px}.scorevalue{font-size:10px}.countdown{font-size:8px}
+  .play{font-size:11px;padding:9px 10px}
 }
 </style>
 </head>
@@ -117,68 +103,30 @@ body{padding:10px}
 <main id="grid" class="grid"></main>
 
 <script>
-const PLAY_URL = "https://masterworldbet.com/games/slot";
-const REFRESH_MS = 3 * 60 * 1000;
+const PLAY_URL = "#"; // ใส่ URL จริงภายหลัง
 let games = [];
 let currentFilter = "all";
-let scoreMap = {};
-let nextRefreshAt = Date.now() + REFRESH_MS;
+const favorites = new Set(JSON.parse(localStorage.getItem("masterworld_favorites") || "[]"));
 
-const favorites = new Set(
-  JSON.parse(localStorage.getItem("masterworld_favorites") || "[]")
-);
-
-function randomScore(){
-  return Math.floor(Math.random() * 40) + 60; // 60-99
-}
-
-function generateScores(){
-  scoreMap = {};
-  games.forEach(g => scoreMap[String(g.id)] = randomScore());
-  nextRefreshAt = Date.now() + REFRESH_MS;
+async function loadGames(){
+  const res = await fetch("./games.json",{cache:"no-store"});
+  if(!res.ok) throw new Error("โหลด games.json ไม่สำเร็จ");
+  games = await res.json();
+  render();
 }
 
 function saveFavorites(){
   localStorage.setItem("masterworld_favorites",JSON.stringify([...favorites]));
 }
 
-async function loadGames(){
-  const res = await fetch("./games.json",{cache:"no-store"});
-  if(!res.ok) throw new Error("โหลด games.json ไม่สำเร็จ");
-  games = await res.json();
-  generateScores();
-  render();
-}
-
 function filteredGames(){
   let list = [...games];
+  if(currentFilter === "favorite") list = list.filter(g => favorites.has(String(g.id)));
+  else if(currentFilter !== "all") list = list.filter(g => (g.tags||[]).includes(currentFilter));
 
-  if(currentFilter === "favorite") {
-    list = list.filter(g => favorites.has(String(g.id)));
-  } 
-  else if(currentFilter !== "all") {
-    list = list.filter(g => (g.tags || []).includes(currentFilter));
-  }
-
-  if(currentFilter === "new") {
-    list.sort((a, b) => b.id - a.id);
-  }
-
-  if(currentFilter === "popular") {
-    list.sort((a, b) => 
-      scoreMap[String(b.id)] - scoreMap[String(a.id)]
-    );
-  }
-
+  // "มาใหม่" ให้เลข 170 อยู่ก่อนตามที่ขอ
+  if(currentFilter === "new") list.sort((a,b)=>b.id-a.id);
   return list;
-}
-
-function formatCountdown(){
-  const remaining=Math.max(0,nextRefreshAt-Date.now());
-  const totalSec=Math.ceil(remaining/1000);
-  const m=Math.floor(totalSec/60);
-  const s=totalSec%60;
-  return `เวลาที่เหลือ ${m}:${String(s).padStart(2,"0")}`;
 }
 
 function render(){
@@ -195,14 +143,18 @@ function render(){
     const card=document.createElement("div");
     card.className="card";
 
+    const a=document.createElement("a");
+    a.href=game.url || "#";
+    a.target="_blank";
+    a.rel="noopener noreferrer";
+    a.style.cssText="display:block;width:100%;height:100%";
+
     const img=document.createElement("img");
     img.src="./images/"+game.image;
     img.alt="";
     img.loading="lazy";
     img.decoding="async";
-
-    // กดที่รูปแล้วจะไม่ไปหน้าอื่น
-    img.addEventListener("click",e=>e.preventDefault());
+    a.appendChild(img);
 
     const fav=document.createElement("button");
     fav.className="fav"+(favorites.has(String(game.id))?" active":"");
@@ -210,46 +162,14 @@ function render(){
     fav.textContent=favorites.has(String(game.id))?"♥":"♡";
     fav.setAttribute("aria-label","เพิ่มหรือลบรายการโปรด");
     fav.addEventListener("click",e=>{
-      e.preventDefault();
-      e.stopPropagation();
+      e.preventDefault();e.stopPropagation();
       const id=String(game.id);
-      if(favorites.has(id)) favorites.delete(id);
-      else favorites.add(id);
-      saveFavorites();
-      render();
+      if(favorites.has(id)) favorites.delete(id); else favorites.add(id);
+      saveFavorites(); render();
     });
 
-    const scorebar=document.createElement("div");
-    scorebar.className="scorebar";
-
-    const scoretop=document.createElement("div");
-    scoretop.className="scoretop";
-
-    const scorevalue=document.createElement("span");
-    scorevalue.className="scorevalue";
-    scorevalue.textContent=`โอกาสชนะ ${scoreMap[String(game.id)]}%`;
-
-    const countdown=document.createElement("span");
-    countdown.className="countdown";
-    countdown.textContent=formatCountdown();
-
-    scoretop.appendChild(scorevalue);
-    scoretop.appendChild(countdown);
-
-    const track=document.createElement("div");
-    track.className="track";
-
-    const fill=document.createElement("div");
-    fill.className="fill";
-    fill.style.width=scoreMap[String(game.id)]+"%";
-
-    track.appendChild(fill);
-    scorebar.appendChild(scoretop);
-    scorebar.appendChild(track);
-
-    card.appendChild(img);
+    card.appendChild(a);
     card.appendChild(fav);
-    card.appendChild(scorebar);
     grid.appendChild(card);
   });
 }
@@ -264,20 +184,9 @@ document.querySelectorAll(".tab").forEach(btn=>{
 });
 
 document.getElementById("playNow").addEventListener("click",()=>{
-  window.open(PLAY_URL,"_blank","noopener,noreferrer");
+  if(PLAY_URL !== "#") window.open(PLAY_URL,"_blank","noopener,noreferrer");
+  else alert("ปุ่มนี้รอใส่ URL จริง");
 });
-
-// อัปเดตตัวเลขเวลาถอยหลังทุกวินาที
-setInterval(()=>{
-  if(Date.now()>=nextRefreshAt){
-    generateScores();
-    render();
-    return;
-  }
-  document.querySelectorAll(".countdown").forEach(el=>{
-    el.textContent=formatCountdown();
-  });
-},1000);
 
 loadGames().catch(err=>{
   console.error(err);
