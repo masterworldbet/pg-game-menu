@@ -1,1165 +1,18 @@
 const crypto = require("crypto");
 
 const LINE_REPLY_API = "https://api.line.me/v2/bot/message/reply";
+const GAMES_JSON_URL =
+  "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/games.json";
 
-const FLEX_CAROUSEL = {
-  "type": "carousel",
-  "contents": [
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-006.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "FUNKY FORTUNEZ",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "99%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 99,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 1,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-001.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "MONKEYS WILD PARTY",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "98%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 98,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 2,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-012.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "MYTHICAL GUARDIANS",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "96%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 96,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 4,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-007.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "PERFECT STRIKE",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "95%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 95,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 5,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-002.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "ZOMBIE BLASTERS",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "90%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 90,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 10,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-003.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "SUPER WILDRIX",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "89%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 89,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 11,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-004.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "MIGHTY MANIA",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "88%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 88,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 12,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-011.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "FORBIDDEN ALCHEMY",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "87%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 87,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 13,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-010.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "FORTUNE HORSE",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "86%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 86,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 14,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-008.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "MAYAN DESTINY",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "85%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 85,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 15,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-009.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "INFERNO MAYHEM",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1
-              },
-              {
-                "type": "text",
-                "text": "83%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 83,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 17,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "bubble",
-      "size": "micro",
-      "hero": {
-        "type": "image",
-        "url": "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/game-005.webp",
-        "size": "full",
-        "aspectRatio": "3:4",
-        "aspectMode": "cover"
-      },
-      "body": {
-        "type": "box",
-        "layout": "vertical",
-        "paddingAll": "9px",
-        "backgroundColor": "#07111F",
-        "spacing": "xs",
-        "contents": [
-          {
-            "type": "text",
-            "text": "REEL ROYALE SHOWDOWN",
-            "weight": "bold",
-            "size": "sm",
-            "color": "#FFFFFF",
-            "wrap": true,
-            "maxLines": 2
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "margin": "sm",
-            "contents": [
-              {
-                "type": "text",
-                "text": "DEMO SCORE",
-                "size": "xxs",
-                "color": "#91A2BD",
-                "flex": 1,
-                "contents": []
-              },
-              {
-                "type": "text",
-                "text": "82%",
-                "size": "md",
-                "weight": "bold",
-                "color": "#E9C8FF",
-                "align": "end"
-              }
-            ]
-          },
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "height": "8px",
-            "cornerRadius": "4px",
-            "backgroundColor": "#17233A",
-            "paddingAll": "1px",
-            "contents": [
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 82,
-                "height": "6px",
-                "cornerRadius": "3px",
-                "backgroundColor": "#B94CFF",
-                "contents": []
-              },
-              {
-                "type": "box",
-                "layout": "vertical",
-                "flex": 18,
-                "height": "6px",
-                "contents": []
-              }
-            ]
-          },
-          {
-            "type": "text",
-            "text": "DEMO UI",
-            "size": "xxs",
-            "color": "#71819A",
-            "align": "end",
-            "margin": "xs"
-          },
-          {
-            "type": "button",
-            "style": "primary",
-            "height": "sm",
-            "color": "#7A42D8",
-            "action": {
-              "type": "uri",
-              "label": "เข้าเกม",
-              "uri": "https://masterworldbet.com/sign-up?ref_agent=1feacd0466b9&ref_zean=0977AB59420F"
-            }
-          }
-        ]
-      }
-    }
-  ]
-};
+const IMAGE_BASE =
+  "https://raw.githubusercontent.com/masterworldbet/pg-game-menu/main/images/";
+
+const FALLBACK_GAMES = Array.from({ length: 170 }, (_, i) => ({
+  id: i + 1,
+  image: `game-${String(i + 1).padStart(3, "0")}.webp`,
+  url: "https://masterworldbet.com/games/slot",
+  tags: [],
+}));
 
 function verifySignature(rawBody, signature, channelSecret) {
   if (!signature || !channelSecret) return false;
@@ -1169,12 +22,10 @@ function verifySignature(rawBody, signature, channelSecret) {
     .update(rawBody)
     .digest("base64");
 
-  const actualBuffer = Buffer.from(signature, "utf8");
-  const expectedBuffer = Buffer.from(expected, "utf8");
+  const a = Buffer.from(signature, "utf8");
+  const b = Buffer.from(expected, "utf8");
 
-  if (actualBuffer.length !== expectedBuffer.length) return false;
-
-  return crypto.timingSafeEqual(actualBuffer, expectedBuffer);
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
 }
 
 function readRawBody(req) {
@@ -1187,7 +38,287 @@ function readRawBody(req) {
   });
 }
 
-async function replyToLine(replyToken) {
+async function loadGames() {
+  try {
+    const response = await fetch(GAMES_JSON_URL, {
+      headers: { "cache-control": "no-cache" },
+    });
+
+    if (!response.ok) {
+      throw new Error(`games.json returned ${response.status}`);
+    }
+
+    const games = await response.json();
+
+    if (!Array.isArray(games) || games.length === 0) {
+      throw new Error("games.json is empty or invalid");
+    }
+
+    return games.filter((game) => game && game.image);
+  } catch (error) {
+    console.error("games.json load failed, using fallback:", error);
+    return FALLBACK_GAMES;
+  }
+}
+
+function getTimePeriod() {
+  // Thailand time (UTC+7)
+  const hour = Number(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Bangkok",
+      hour: "numeric",
+      hour12: false,
+    }).format(new Date())
+  );
+
+  if (hour >= 6 && hour < 12) {
+    return { key: "morning", label: "ช่วงเช้า" };
+  }
+
+  if (hour >= 12 && hour < 17) {
+    return { key: "day", label: "ช่วงกลางวัน" };
+  }
+
+  if (hour >= 17 && hour < 22) {
+    return { key: "evening", label: "ช่วงเย็น" };
+  }
+
+  return { key: "night", label: "ช่วงดึก" };
+}
+
+function shuffle(items) {
+  const array = [...items];
+
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+
+  return array;
+}
+
+function getRecommendedGames(games, periodKey) {
+  /*
+   * ใช้เกมทั้งหมดจาก games.json ที่มีอยู่ใน Repo
+   * แบ่ง pool ตามช่วงเวลาแบบ deterministic จาก game id
+   * และให้น้ำหนักเกมที่มี tag "popular" / "hit" มากกว่า
+   * จากนั้นสุ่มเลือก 5 เกมทุกครั้งที่กด Rich Menu
+   */
+
+  const periodIndex = {
+    morning: 0,
+    day: 1,
+    evening: 2,
+    night: 3,
+  }[periodKey];
+
+  const validGames = games.filter((game) => game.image);
+
+  const periodPool = validGames.filter((game) => {
+    const id = Number(game.id);
+    return Number.isFinite(id) && ((id - 1) % 4 === periodIndex);
+  });
+
+  const pool = periodPool.length >= 5 ? periodPool : validGames;
+
+  const popular = pool.filter(
+    (game) =>
+      Array.isArray(game.tags) &&
+      (game.tags.includes("popular") || game.tags.includes("hit"))
+  );
+
+  const normal = pool.filter((game) => !popular.includes(game));
+
+  // ให้เกมที่ติด tag มีโอกาสถูกเลือกมากกว่า แต่ยังสุ่มทุกครั้ง
+  const weightedPool = [
+    ...shuffle(popular),
+    ...shuffle(popular),
+    ...shuffle(normal),
+  ];
+
+  const selected = [];
+  const used = new Set();
+
+  for (const game of weightedPool) {
+    const key = String(game.id ?? game.image);
+
+    if (used.has(key)) continue;
+
+    used.add(key);
+    selected.push(game);
+
+    if (selected.length === 5) break;
+  }
+
+  // กรณี pool เล็กผิดปกติ เติมจากเกมทั้งหมด
+  if (selected.length < 5) {
+    for (const game of shuffle(validGames)) {
+      const key = String(game.id ?? game.image);
+
+      if (used.has(key)) continue;
+
+      used.add(key);
+      selected.push(game);
+
+      if (selected.length === 5) break;
+    }
+  }
+
+  return selected;
+}
+
+function randomDemoScore() {
+  // ค่า UI ทดลอง ไม่ใช่อัตราชนะจริง
+  return Math.floor(Math.random() * 40) + 60; // 60-99
+}
+
+function getGameUrl(game) {
+  if (
+    typeof game.url === "string" &&
+    /^https:\/\//i.test(game.url) &&
+    !game.url.includes("example.com")
+  ) {
+    return game.url;
+  }
+
+  return "https://masterworldbet.com/games/slot";
+}
+
+function createBubble(game) {
+  const score = randomDemoScore();
+
+  const filled = Math.max(1, score);
+  const empty = Math.max(1, 100 - score);
+
+  return {
+    type: "bubble",
+    size: "micro",
+
+    hero: {
+      type: "image",
+      url: `${IMAGE_BASE}${game.image}`,
+      size: "full",
+      aspectRatio: "3:4",
+      aspectMode: "cover",
+    },
+
+    body: {
+      type: "box",
+      layout: "vertical",
+      paddingAll: "9px",
+      backgroundColor: "#07111F",
+      spacing: "xs",
+
+      contents: [
+        {
+          type: "text",
+          text: String(game.name || `GAME ${game.id || ""}`).trim(),
+          weight: "bold",
+          size: "sm",
+          color: "#FFFFFF",
+          wrap: true,
+          maxLines: 2,
+        },
+
+        {
+          type: "box",
+          layout: "horizontal",
+          margin: "sm",
+          contents: [
+            {
+              type: "text",
+              text: "DEMO SCORE",
+              size: "xxs",
+              color: "#91A2BD",
+              flex: 1,
+            },
+            {
+              type: "text",
+              text: `${score}%`,
+              size: "md",
+              weight: "bold",
+              color: "#E9C8FF",
+              align: "end",
+            },
+          ],
+        },
+
+        {
+          type: "box",
+          layout: "horizontal",
+          height: "8px",
+          cornerRadius: "4px",
+          backgroundColor: "#17233A",
+          paddingAll: "1px",
+          contents: [
+            {
+              type: "box",
+              layout: "vertical",
+              flex: filled,
+              height: "6px",
+              cornerRadius: "3px",
+              backgroundColor: "#B94CFF",
+              contents: [],
+            },
+            {
+              type: "box",
+              layout: "vertical",
+              flex: empty,
+              height: "6px",
+              contents: [],
+            },
+          ],
+        },
+
+        {
+          type: "text",
+          text: "DEMO UI",
+          size: "xxs",
+          color: "#71819A",
+          align: "end",
+          margin: "xs",
+        },
+      ],
+    },
+
+    footer: {
+      type: "box",
+      layout: "vertical",
+      backgroundColor: "#07111F",
+      paddingAll: "9px",
+      contents: [
+        {
+          type: "button",
+          style: "primary",
+          height: "sm",
+          color: "#7A42D8",
+          action: {
+            type: "uri",
+            label: "เข้าเล่น",
+            uri: getGameUrl(game),
+          },
+        },
+      ],
+    },
+  };
+}
+
+async function createFlexMessage() {
+  const games = await loadGames();
+  const period = getTimePeriod();
+  const selected = getRecommendedGames(games, period.key);
+
+  return {
+    type: "flex",
+    altText: `เกมแนะนำ ${period.label}`,
+    contents: {
+      type: "carousel",
+      contents: selected.map(createBubble),
+    },
+  };
+}
+
+async function replyToLine(replyToken, message) {
   const response = await fetch(LINE_REPLY_API, {
     method: "POST",
     headers: {
@@ -1196,13 +327,7 @@ async function replyToLine(replyToken) {
     },
     body: JSON.stringify({
       replyToken,
-      messages: [
-        {
-          type: "flex",
-          altText: "MASTER WORLD GAME MENU",
-          contents: FLEX_CAROUSEL,
-        },
-      ],
+      messages: [message],
     }),
   });
 
@@ -1210,6 +335,21 @@ async function replyToLine(replyToken) {
     const errorText = await response.text();
     throw new Error(`LINE API ${response.status}: ${errorText}`);
   }
+}
+
+function isGameMenuMessage(event) {
+  if (event.type !== "message") return false;
+  if (event.message?.type !== "text") return false;
+
+  const text = String(event.message.text || "").trim().toLowerCase();
+
+  return [
+    "เกมส์แตกเวลานี้",
+    "เกมแตกเวลานี้",
+    "เกมส์แนะนำ",
+    "เกมแนะนำ",
+    "เมนู",
+  ].includes(text);
 }
 
 module.exports = async function handler(req, res) {
@@ -1235,8 +375,20 @@ module.exports = async function handler(req, res) {
     const events = Array.isArray(payload.events) ? payload.events : [];
 
     for (const event of events) {
-      if (event.type !== "follow" || !event.replyToken) continue;
-      await replyToLine(event.replyToken);
+      if (!event.replyToken) continue;
+
+      // คนเพิ่มเพื่อนใหม่
+      if (event.type === "follow") {
+        await replyToLine(event.replyToken, await createFlexMessage());
+        continue;
+      }
+
+      // คนที่เป็นเพื่อนอยู่แล้วกด Rich Menu
+      // โดยตั้ง Rich Menu action เป็น Message:
+      // "เกมส์แตกเวลานี้"
+      if (isGameMenuMessage(event)) {
+        await replyToLine(event.replyToken, await createFlexMessage());
+      }
     }
 
     return res.status(200).json({ ok: true });
