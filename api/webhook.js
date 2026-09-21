@@ -278,15 +278,37 @@ function createBubble(game) {
       paddingAll: "9px",
       contents: [
         {
-          type: "button",
-          style: "primary",
-          height: "sm",
-          color: "#7A42D8",
+          type: "box",
+          layout: "vertical",
+          height: "40px",
+          cornerRadius: "20px",
+          backgroundColor: "#8B2CF5",
+          paddingAll: "1px",
           action: {
             type: "uri",
-            label: "เข้าเล่น",
             uri: getGameUrl(game),
           },
+          contents: [
+            {
+              type: "box",
+              layout: "vertical",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              cornerRadius: "19px",
+              backgroundColor: "#B94CFF",
+              contents: [
+                {
+                  type: "text",
+                  text: "⚡ เข้าเล่นตอนนี้",
+                  size: "sm",
+                  weight: "bold",
+                  color: "#FFFFFF",
+                  align: "center",
+                },
+              ],
+            },
+          ],
         },
       ],
     },
