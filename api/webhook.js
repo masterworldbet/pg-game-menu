@@ -167,7 +167,7 @@ function getRecommendedGames(games, periodKey) {
   return selected;
 }
 
-function randomDemoScore() {
+function randomScore() {
   // ค่า UI ทดลอง ไม่ใช่อัตราชนะจริง
   return Math.floor(Math.random() * 40) + 60; // 60-99
 }
@@ -185,7 +185,7 @@ function getGameUrl(game) {
 }
 
 function createBubble(game) {
-  const score = randomDemoScore();
+  const score = randomScore();
 
   const filled = Math.max(1, score);
   const empty = Math.max(1, 100 - score);
@@ -212,7 +212,7 @@ function createBubble(game) {
       contents: [
         {
           type: "text",
-          text: String(game.name || `GAME ${game.id || ""}`).trim(),
+          text: String(game.name || "").trim(),
           weight: "bold",
           size: "sm",
           color: "#FFFFFF",
@@ -227,7 +227,7 @@ function createBubble(game) {
           contents: [
             {
               type: "text",
-              text: "DEMO SCORE",
+              text: "SCORE",
               size: "xxs",
               color: "#91A2BD",
               flex: 1,
@@ -272,7 +272,7 @@ function createBubble(game) {
 
         {
           type: "text",
-          text: "DEMO UI",
+          text: "โอกาสชนะ",
           size: "xxs",
           color: "#71819A",
           align: "end",
