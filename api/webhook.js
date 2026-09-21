@@ -1,4 +1,8 @@
-{
+const crypto = require("crypto");
+
+const LINE_REPLY_API = "https://api.line.me/v2/bot/message/reply";
+
+const FLEX_CAROUSEL = {
   "type": "carousel",
   "contents": [
     {
@@ -34,7 +38,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1
@@ -130,7 +134,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1
@@ -226,7 +230,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1
@@ -322,7 +326,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1
@@ -418,7 +422,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1
@@ -514,7 +518,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1
@@ -610,7 +614,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1
@@ -706,7 +710,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1
@@ -802,7 +806,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1
@@ -898,7 +902,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1
@@ -994,7 +998,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1
@@ -1090,7 +1094,7 @@
             "contents": [
               {
                 "type": "text",
-                "text": "อัตราชนะ",
+                "text": "DEMO SCORE",
                 "size": "xxs",
                 "color": "#91A2BD",
                 "flex": 1,
@@ -1155,4 +1159,95 @@
       }
     }
   ]
+};
+
+function verifySignature(rawBody, signature, channelSecret) {
+  if (!signature || !channelSecret) return false;
+
+  const expected = crypto
+    .createHmac("sha256", channelSecret)
+    .update(rawBody)
+    .digest("base64");
+
+  const actualBuffer = Buffer.from(signature, "utf8");
+  const expectedBuffer = Buffer.from(expected, "utf8");
+
+  if (actualBuffer.length !== expectedBuffer.length) return false;
+
+  return crypto.timingSafeEqual(actualBuffer, expectedBuffer);
 }
+
+function readRawBody(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+
+    req.on("data", (chunk) => chunks.push(Buffer.from(chunk)));
+    req.on("end", () => resolve(Buffer.concat(chunks)));
+    req.on("error", reject);
+  });
+}
+
+async function replyToLine(replyToken) {
+  const response = await fetch(LINE_REPLY_API, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.LINE_CHANNEL_ACCESS_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      replyToken,
+      messages: [
+        {
+          type: "flex",
+          altText: "MASTER WORLD GAME MENU",
+          contents: FLEX_CAROUSEL,
+        },
+      ],
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`LINE API ${response.status}: ${errorText}`);
+  }
+}
+
+module.exports = async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(200).send("LINE webhook is running");
+  }
+
+  try {
+    const rawBody = await readRawBody(req);
+    const signature = req.headers["x-line-signature"];
+
+    if (
+      !verifySignature(
+        rawBody,
+        signature,
+        process.env.LINE_CHANNEL_SECRET
+      )
+    ) {
+      return res.status(401).send("Invalid signature");
+    }
+
+    const payload = JSON.parse(rawBody.toString("utf8"));
+    const events = Array.isArray(payload.events) ? payload.events : [];
+
+    for (const event of events) {
+      if (event.type !== "follow" || !event.replyToken) continue;
+      await replyToLine(event.replyToken);
+    }
+
+    return res.status(200).json({ ok: true });
+  } catch (error) {
+    console.error("Webhook error:", error);
+    return res.status(500).json({ ok: false });
+  }
+};
+
+module.exports.config = {
+  api: {
+    bodyParser: false,
+  },
+};
