@@ -211,16 +211,6 @@ function createBubble(game) {
 
       contents: [
         {
-          type: "text",
-          text: String(game.name || "").trim(),
-          weight: "bold",
-          size: "sm",
-          color: "#FFFFFF",
-          wrap: true,
-          maxLines: 2,
-        },
-
-        {
           type: "box",
           layout: "horizontal",
           margin: "sm",
